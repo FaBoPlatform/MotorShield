@@ -72,7 +72,7 @@ class RobotCar(threading.Thread):
         GPIO.setup(HALL_SENSOR, GPIO.IN) #GPIOを入力に設定
         GPIO.setup(SERVO_PIN , GPIO.OUT) #GPIOを入力に設定
         self.myServo = GPIO.PWM(SERVO_PIN ,PWM_HZ) 
-        self.myServo.start(10)
+        self.myServo.start(9)
     
     def map(self, x, in_min, in_max, out_min, out_max):
         return (x - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
@@ -111,7 +111,7 @@ class RobotCar(threading.Thread):
         self.set_freq(50)
     
     def handle_zero(self):
-        self.set_PWM(0, 8.5)
+        self.set_PWM(0, 9)
         
     def set_freq(self, hz):
         setval=int(round(OSC_CLOCK/(4096*hz))-1)
