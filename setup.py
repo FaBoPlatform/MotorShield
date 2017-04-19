@@ -2,6 +2,7 @@
 # coding: utf-8
 import os
 from setuptools import setup, find_packages
+from MotorShield import __author__, __version__, __license__
 
 try:
     import pypandoc
