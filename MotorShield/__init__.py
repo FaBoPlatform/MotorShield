@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
-from .MotorShield import *
+from RobotCar import *
+from RobotMouse import *
  
 __author__  = 'FaBo Inc'
 __version__ = '0.0.1'
