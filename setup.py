@@ -24,7 +24,7 @@ setup(
         description      = 'Motor Shield Lib',
         license          = __license__,
         author           = __author__,
-        author_email     = 'akira@fabo.o',
+        author_email     = 'akira@fabo.io',
         url              = 'https://github.com/FaBoPlatform/MotorShield/',
         keywords         = 'Motor Shield Lib',
         packages         = find_packages(),
