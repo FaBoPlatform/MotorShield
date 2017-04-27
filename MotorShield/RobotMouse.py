@@ -6,8 +6,8 @@ import RPi.GPIO as GPIO
 import sys
 
 ## DRV8830 Default I2C slave address
-SLAVE_ADDRESS_LEFT  = 0x64
-SLAVE_ADDRESS_RIGHT  = 0x65
+SLAVE_ADDRESS_LEFT  = 0x63
+SLAVE_ADDRESS_RIGHT  = 0x64
 ## PCA9685 Default I2C slave address
 PCA9685_ADDRESS = 0x40
 
