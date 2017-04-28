@@ -59,7 +59,7 @@ class RobotMouse(threading.Thread):
     def map(self, x, in_min, in_max, out_min, out_max):
         return (x - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
     
-    def right_forward(self, speed):
+    def right_back(self, speed):
         if speed < 0:
             print "value is under 0,  must define 1-100 as speed."
             return
@@ -72,7 +72,7 @@ class RobotMouse(threading.Thread):
         bus.write_i2c_block_data(self.address_right,CONTROL,[sval]) #生成したデータを送信
     
     # speedは0-100で指定
-    def right_back(self, speed):
+    def right_forward(self, speed):
         if speed < 0:
             print "value is under 0,  must define 1-100 as speed."
             return
