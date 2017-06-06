@@ -146,10 +146,7 @@ class RobotCar():
         return
 
     def handle_zero(self,value=None):
-        if value is None:
-            self.handle.set_neutral()
-        else:
-            self.handle.set_neutral(value)
+        self.handle.set_neutral(value)
 
     def handle_move(self, value):
         self.handle.set_handle(value)
