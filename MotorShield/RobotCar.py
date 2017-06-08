@@ -63,38 +63,41 @@ class Handle():
     # サーボの中央位置
     SERVO_NEUTRAL_VALUE = 300
     # サーボのステアリングとしての稼働可能角
-    HANDLE_MAX_VALUE = 145
+    HANDLE_MAX_VALUE = 45
 
     def __init__(self, PCA9685, channel=0):
         self.CHANNEL = channel
         self.PCA9685 = PCA9685
 
-    def set_handle(self, value):
-        self.PCA9685.set_channel_value(self.CHANNEL, value)
+    def right(self):
+        self.angle(self.SERVO_NEUTRAL_VALUE + self.HANDLE_MAX_VALUE)
 
-    def set_neutral(self, value=None):
+    def left(self):
+        self.angle(self.SERVO_NEUTRAL_VALUE - self.HANDLE_MAX_VALUE)
+
+    def forward(self, value=None):
         if value is None:
             value = self.SERVO_NEUTRAL_VALUE
         '''
         ハンドルをニュートラル位置に戻す
         引数valueはニュートラル位置を更新する
         '''
-        if not self.handle_validation(value):
+        if not self.handle_angle_validation(value):
             return
 
         # 引数valueをニュートラル位置に更新する
         self.SERVO_NEUTRAL_VALUE = value
         self.PCA9685.set_channel_value(self.CHANNEL, self.SERVO_NEUTRAL_VALUE)
 
-    def get_handle(self):
-        return self.PCA9685.get_channel_value(self.CHANNEL)
-
-    def set_handle(self, value):
-        if not self.handle_validation(value):
+    def angle(self, value):
+        if not self.handle_angle_validation(value):
             return
         self.PCA9685.set_channel_value(self.CHANNEL, value)
 
-    def servo_validation(self,value):
+    def get_angle(self):
+        return self.PCA9685.get_channel_value(self.CHANNEL)
+
+    def servo_angle_validation(self,value):
         '''
         引数valueがサーボの可動範囲内かどうかを確認する
         '''
@@ -105,11 +108,11 @@ class Handle():
             return False
         return True
 
-    def handle_validation(self,value):
+    def handle_angle_validation(self,value):
         '''
         引数valueがハンドルの可動範囲内かどうかを確認する
         '''
-        if not self.servo_validation(value):
+        if not self.servo_angle_validation(value):
             return False
 
         if not (self.SERVO_NEUTRAL_VALUE - self.HANDLE_MAX_VALUE <= value):
@@ -130,26 +133,29 @@ class RobotCar():
         channel = 0
         self.handle = Handle(self.PCA9685,channel)
 
-    def car_forward(self, speed):
+    def motor_forward(self, speed):
         self.motor.forward(speed)
 
-    def car_stop(self):
+    def motor_stop(self):
         self.motor.stop()
 
-    def car_back(self, speed):
+    def motor_back(self, speed):
         self.motor.back(speed)
 
-    def car_brake(self):
+    def motor_brake(self):
         self.motor.brake()
 
-    def handle_init(self):
-        return
+    def handle_right(self):
+        self.handle.right()
 
-    def handle_zero(self,value=None):
-        self.handle.set_neutral(value)
+    def handle_left(self):
+        self.handle.left()
 
-    def handle_move(self, value):
-        self.handle.set_handle(value)
+    def handle_forward(self,value=None):
+        self.handle.forward(value)
 
-    def handle_value(self):
-        return self.handle.get_handle()
+    def handle_angle(self, value):
+        self.handle.angle(value)
+
+    def get_handle_angle(self):
+        return self.handle.get_angle()
