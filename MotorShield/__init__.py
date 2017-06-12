@@ -4,5 +4,5 @@ from RobotCar import *
 from RobotMouse import *
  
 __author__  = 'FaBo Inc'
-__version__ = '0.0.7'
+__version__ = '0.0.9'
 __license__ = 'Apache Software License'
