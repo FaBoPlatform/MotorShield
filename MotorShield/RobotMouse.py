@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*- 
+# coding: utf-8
 import smbus
 import time
 import threading
-import RPi.GPIO as GPIO
 import sys
 
 ## DRV8830 Default I2C slave address
@@ -47,14 +46,16 @@ SLEEP_BIT = 0x10
 #PWMを50Hzに設定
 PWM_HZ = 50
 
-## smbus
-bus = smbus.SMBus(1)
 
 class RobotMouse(threading.Thread):
+
     def __init__(self, address_right=SLAVE_ADDRESS_RIGHT, address_left=SLAVE_ADDRESS_LEFT): 
         self.address_right = address_right
         self.address_left = address_left
+        ## smbus
+        self.bus = smbus.SMBus(1)
         threading.Thread.__init__(self)
+        
     
     def map(self, x, in_min, in_max, out_min, out_max):
         return (x - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
@@ -69,7 +70,7 @@ class RobotMouse(threading.Thread):
         self.direction = FORWARD
         s = self.map(speed, 1, 100, 1, 58)
         sval = FORWARD | ((s+5)<<2) #スピードを設定して送信するデータを1Byte作成
-        bus.write_i2c_block_data(self.address_right,CONTROL,[sval]) #生成したデータを送信
+        self.bus.write_i2c_block_data(self.address_right,CONTROL,[sval]) #生成したデータを送信
     
     # speedは0-100で指定
     def right_back(self, speed):
@@ -82,10 +83,10 @@ class RobotMouse(threading.Thread):
         self.direction = BACK
         s= self.map(speed, 1, 100, 1, 58)
         sval = BACK| ((s+5)<<2) #スピードを設定して送信するデータを1Byte作成
-        bus.write_i2c_block_data(self.address_right,CONTROL,[sval]) #生成したデータを送信
+        self.bus.write_i2c_block_data(self.address_right,CONTROL,[sval]) #生成したデータを送信
         
     def right_stop(self):
-        bus.write_i2c_block_data(self.address_right,CONTROL,[STOP]) #モータへの電力の供給を停止(惰性で動き続ける)
+        self.bus.write_i2c_block_data(self.address_right,CONTROL,[STOP]) #モータへの電力の供給を停止(惰性で動き続ける)
         
     def left_forward(self, speed):
         if speed < 0:
@@ -97,7 +98,7 @@ class RobotMouse(threading.Thread):
         self.direction = FORWARD
         s = self.map(speed, 1, 100, 1, 58)
         sval = FORWARD | ((s+5)<<2) #スピードを設定して送信するデータを1Byte作成
-        bus.write_i2c_block_data(self.address_left,CONTROL,[sval]) #生成したデータを送信
+        self.bus.write_i2c_block_data(self.address_left,CONTROL,[sval]) #生成したデータを送信
     
     # speedは0-100で指定
     def left_back(self, speed):
@@ -110,14 +111,14 @@ class RobotMouse(threading.Thread):
         self.direction = BACK
         s= self.map(speed, 1, 100, 1, 58)
         sval = BACK| ((s+5)<<2) #スピードを設定して送信するデータを1Byte作成
-        bus.write_i2c_block_data(self.address_left,CONTROL,[sval]) #生成したデータを送信
+        self.bus.write_i2c_block_data(self.address_left,CONTROL,[sval]) #生成したデータを送信
         
     def left_stop(self):
-        bus.write_i2c_block_data(self.address_left,CONTROL,[STOP]) #モータへの電力の供給を停止(惰性で動き続ける)
+        self.bus.write_i2c_block_data(self.address_left,CONTROL,[STOP]) #モータへの電力の供給を停止(惰性で動き続ける)
     
     def right_brake(self):
-        bus.write_i2c_block_data(self.address_right,CONTROL,[0x03]) #モータをブレーキさせる
+        self.bus.write_i2c_block_data(self.address_right,CONTROL,[0x03]) #モータをブレーキさせる
     
     def left_brake(self):
-        bus.write_i2c_block_data(self.address_left,CONTROL,[0x03]) #モータをブレーキさせる
+        self.bus.write_i2c_block_data(self.address_left,CONTROL,[0x03]) #モータをブレーキさせる
     
